@@ -34,12 +34,10 @@
 
                             <div class="mb-3">
                                 <label for="floatingTextarea2" class="form-label h6">Description</label>
-                                {{-- <div class="form-floating"> --}}
                                 <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea2" style="height: 90px"
                                     class="@error('description') is-invalid
                                         @enderror   form-control-lg form-control"
                                     name="description">{{ old('description', $post->description) }}</textarea>
-                                {{-- </div> --}}
                                 @error('description')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -62,13 +60,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function deleteSkill(id) {
-            if (confirm("Are you sure you want to delete skill?")) {
-                document.getElementById("delete-skill-from-" + id).submit();
-            }
-        }
-    </script>
-
-
 @endsection

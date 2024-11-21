@@ -45,29 +45,4 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-    </div>
-    </div>
-    </div>
-    </main>
-
-
-
-
-    <script>
-        function deleteSkill(id) {
-            if (confirm("Are you sure you want to delete skill?")) {
-                document.getElementById("delete-skill-from-" + id).submit();
-            }
-        }
-    </script>
-    </body>
-
 @endsection
