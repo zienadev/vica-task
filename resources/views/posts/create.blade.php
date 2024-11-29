@@ -36,14 +36,19 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                            {{-- <div class="form-group">
+                                <label for="images">Images</label>
+                                <input type="file" name="images[]" class="form-control" multiple>
+                            </div> --}}
                             <div class="mb-3">
                                 <label for="formGroupExampleInput3" class="form-label h6">Image</label>
-                                <input type="file" name="image" value="{{ old('image') }}" class="form-control"
-                                    id="formGroupExampleInput3" placeholder="Choose Image" required>
-                                @error('image')
+                                <input type="file" name="images[]" value="{{ old('image') }}" class="form-control"
+                                    id="formGroupExampleInput3" placeholder="Choose Image" required multiple>
+                                @error('images[]')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+
                             <button type="submit" class="btn btn-primary">Send</button>
 
                         </form>

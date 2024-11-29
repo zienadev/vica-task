@@ -34,12 +34,15 @@
                                             <td>{{ $post->title }}</td>
                                             <td>{{ $post->description }}</td>
                                             <td>
-                                                @if ($post->image != '')
-                                                    <img width="100" src="{{ asset('/images/posts/' . $post->image) }}"
-                                                        alt="">
+                                                @if (is_array($post->images))
+                                                    @foreach (json_decode($post->images) as $image)
+                                                        <img width="50" height="50"
+                                                            src="{{ asset('/images/posts/' . $image) }} " alt="">
+                                                    @endforeach
                                                 @endif
                                             </td>
                                             <td>
+
                                                 <a href="{{ route('posts.edit', $post) }}"
                                                     class="btn btn-secondary">Edit</a>
                                                 <a href="{{ route('posts.show', $post) }}" class="btn btn-dark">Show</a>

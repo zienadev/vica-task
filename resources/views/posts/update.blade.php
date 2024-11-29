@@ -42,15 +42,31 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="mb-3">
+
+                            {{-- <div class="mb-3">
                                 <label for="formGroupExampleInput3" class="form-label h6">Image</label>
                                 <input type="file" id="formGroupExampleInput3" class="form-control form-control-sm"
                                     placeholder="image" name="image">
                                 @if ($post->image != '')
                                     <img class="w-50 my-3" src="{{ asset('images/posts/' . $post->image) }}" alt="">
                                 @endif
+                            </div> --}}
+
+                            <div class="mb-3">
+                                <label for="formGroupExampleInput3" class="form-label h6">Image</label>
+                                <input type="file" name="images[]" id="formGroupExampleInput3"
+                                    class="form-control form-control-sm" placeholder="image" multiple>
+                                <div>
+                                    @if (is_array($post->images))
+                                        @foreach (json_decode($post->images) as $image)
+                                            <img class="w-50 my-3" src="{{ asset('images/posts/' . $image) }}"
+                                                alt="">
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                             {{-- <div class="d-grid"> --}}
+
                             <button class="btn  btn-primary">Update</button>
                             {{-- </div> --}}
                         </div>

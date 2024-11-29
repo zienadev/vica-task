@@ -30,20 +30,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile("image")) {
-            $imageName = $request->file("image")->getClientOriginalName() . "-" . time() . "." .
-                $request->file("image")->getClientOriginalExtension();
-            $request->file("image")->move(public_path("images/posts"), $imageName);
+        $images = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = $this->uploadImage($image);
+                $images[] = $imageName;
+            }
         }
-
-
+        // dd($images);
         Post::create([
             "title" => $request->title,
             "description" => $request->description,
-            "image" => $imageName
+            "images" => json_encode($images)
         ]);
 
-        return redirect()->route("posts.index")->with('success', 'Post created successfully');;
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     /**
@@ -59,7 +60,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-
         return view('posts.update', compact('post'));
     }
 
@@ -68,26 +68,31 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        function uploadImage($file)
-        {
+        // $oldImages = json_decode($post->images, true) ?? [];
 
-            $imageName = $file->getClientOriginalName() . '-' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/posts'), $imageName);
+        // foreach ($oldImages as $oldImage) {
+        //     $path = public_path('images/posts/' . $oldImage);
+        //     if (file_exists($path)) {
+        //         unlink($path);
+        //     }
+        // }
 
-            return $imageName;
+        $images = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = $this->uploadImage($image);
+                $images[] = $imageName;
+            }
+        } else {
+            $images[] = $post->images;
         }
+
         $post->update([
             'title' => $request->title,
             'description' => $request->description,
+            'images' => json_encode($images),
         ]);
-        if ($request->image != "") {
-            // delete old image
-            File::delete(public_path('images/posts/' . $post->image));
-            $post->update([
-                // Update the image if a new one is uploaded
-                'image' => $request->hasFile('image') ? uploadImage($request->file('image')) : $post->image,
-            ]);
-        }
+
         return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
 
@@ -96,10 +101,23 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-        // delete image
-        File::delete(public_path('images/posts/' . $post->image));
+        $images = json_decode($post->images, true) ?? [];
+        foreach ($images as $image) {
+            $path = public_path('images/posts/' . $image);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
 
+        $post->delete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
+    }
+
+    private function uploadImage($file)
+    {
+        $imageName = $file->getClientOriginalName() . '-' . time() . '.' . $file->getClientOriginalExtension();
+        $file->move(public_path('images/posts'), $imageName);
+
+        return $imageName;
     }
 }

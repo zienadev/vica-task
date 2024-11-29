@@ -30,9 +30,10 @@
                             <labeImage for="formFileDisabled" class="form-label h6">Image</label>
                                 <input class="form-control  bg-light" type="file" id="formFileDisabled" disabled>
                         </div>
-                        @if ($post->image != '')
-                            <img class="w-50 my-3  bg-light" src="{{ asset('images/posts/' . $post->image) }}"
-                                alt="">
+                        @if (is_array($post->images))
+                            @foreach (json_decode($post->images) as $image)
+                                <img src="{{ asset('/images/posts/' . $image) }}" width="50" height="50">
+                            @endforeach
                         @endif
                     </div>
                     {{-- <div class="d-grid">
